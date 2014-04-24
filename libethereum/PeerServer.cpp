@@ -555,7 +555,7 @@ void PeerServer::restorePeers(bytesConstRef _b)
 		auto k = (Public)i[2];
 		if (!m_incomingPeers.count(k))
 		{
-			m_incomingPeers.insert(make_pair(k, make_pair(bi::tcp::endpoint(bi::address_v4(i[0].toArray<byte, 4>()), i[1].toInt<short>()), 0)));
+			m_incomingPeers.insert(make_pair(k, make_pair(bi::tcp::endpoint(bi::address_v4(i[0].toInt<long>()), i[1].toInt<short>()), 0)));
 			m_freePeers.push_back(k);
 		}
 	}

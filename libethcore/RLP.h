@@ -277,6 +277,7 @@ public:
 	RLPStream& append(bytesConstRef _s, bool _compact = false);
 	RLPStream& append(bytes const& _s) { return append(bytesConstRef(&_s)); }
 	RLPStream& append(std::string const& _s) { return append(bytesConstRef(_s)); }
+	RLPStream& append(boost::asio::ip::address_v4::bytes_type const& _s) { return append(bytesConstRef(_s)); };
 	RLPStream& append(char const* _s) { return append(std::string(_s)); }
 	template <unsigned N> RLPStream& append(FixedHash<N> _s, bool _compact = false) { return append(_s.ref(), _compact); }
 
