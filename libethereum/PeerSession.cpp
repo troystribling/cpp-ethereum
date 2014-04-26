@@ -173,7 +173,7 @@ bool PeerSession::interpret(RLP const& _r)
 		clogS(NetMessageSummary) << "Peers (" << dec << (_r.itemCount() - 1) << " entries)";
 		for (unsigned i = 1; i < _r.itemCount(); ++i)
 		{
-			bi::address_v4 peerAddress(_r[i][0].toArray<byte, 4>());
+			bi::address_v4 peerAddress(_r[i][0].toInt<unsigned long>());
 			auto ep = bi::tcp::endpoint(peerAddress, _r[i][1].toInt<short>());
 			Public id = _r[i][2].toHash<Public>();
 			if (isPrivateAddress(peerAddress))
@@ -446,7 +446,7 @@ void PeerSession::sendDestroy(bytes& _msg)
 void PeerSession::send(bytesConstRef _msg)
 {
 	clogS(NetLeft) << RLP(_msg.cropped(8));
-	
+
 	if (!checkPacket(_msg))
 	{
 		cwarn << "INVALID PACKET CONSTRUCTED!";
@@ -515,7 +515,7 @@ void PeerSession::start()
 void PeerSession::doRead()
 {
 	auto self(shared_from_this());
-	m_socket.async_read_some(boost::asio::buffer(m_data), [this,self](boost::system::error_code ec, std::size_t length)
+	m_socket.async_read_some(boost::asio::buffer(m_data.data(), m_data.size()), [this,self](boost::system::error_code ec, std::size_t length)
 	{
 		if (ec)
 		{
